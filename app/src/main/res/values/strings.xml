@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Chemistry News</string>
+    <string name="search">Cerca</string>
+    <string name="interests">Interessi</string>
+    <string name="saved">Salvati</string>
+    <string name="search_chemistry_news">Cerca notizie sulla chimica…</string>
+    <string name="no_articles_found">Nessun articolo trovato</string>
+    <string name="error_loading">Errore nel caricamento</string>
+    <string name="retry">Riprova</string>
+    <string name="save">Salva</string>
+    <string name="saved_successfully">Salvato con successo</string>
+    <string name="select_interests">Seleziona i tuoi interessi</string>
+    <string name="organic_chemistry">Chimica Organica</string>
+    <string name="inorganic_chemistry">Chimica Inorganica</string>
+    <string name="analytical_chemistry">Chimica Analitica</string>
+    <string name="physical_chemistry">Chimica Fisica</string>
+    <string name="biochemistry">Biochimica</string>
+    <string name="materials_science">Scienza dei Materiali</string>
+    <string name="pharmaceuticals">Farmaceutica</string>
+    <string name="environmental_chemistry">Chimica Ambientale</string>
+    <string name="generate_summary">Genera Riassunto AI</string>
+    <string name="summary">Riassunto</string>
+    <string name="generating">Generazione in corso…</string>
+    <string name="read_full_article">Leggi Articolo Completo</string>
+    <string name="published_on">Pubblicato il</string>
+    <string name="source">Fonte</string>
+</resources>
