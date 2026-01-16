@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chemistry News App - Guida Rapida</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        .step {
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .step-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 1.2em;
+        }
+
+        .step-title {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .step-content {
+            color: #555;
+            line-height: 1.8;
+            margin-left: 55px;
+        }
+
+        .code {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .success {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            color: #155724;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 8px;
+            margin: 10px 5px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #5568d3;
+        }
+
+        .emoji {
+            font-size: 1.3em;
+            margin-right: 8px;
+        }
+
+        .troubleshoot {
+            background: #f8d7da;
+            border-left: 5px solid #dc3545;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+
+        ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        li {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
+        .final {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+            font-size: 1.3em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Chemistry News App</h1>
+        <p class="subtitle">Guida Rapida alla Compilazione APK</p>
+
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">1</span>
+                <span class="emoji">🔑</span> Ottieni API Key (2 minuti)
+            </div>
+            <div class="step-content">
+                <ol>
+                    <li>Vai su: <a href="https://newsapi.org/register" target="_blank"><strong>https://newsapi.org/register</strong></a></li>
+                    <li>Registrati gratuitamente (email + password)</li>
+                    <li>Riceverai subito la tua API Key</li>
+                    <li><strong>Copia la chiave</strong> (esempio: abc123def456...)</li>
+                </ol>
+                <div class="success">
+                    ✅ L'API Key è <strong>gratuita</strong> e permette 100 richieste al giorno!
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">2</span>
+                <span class="emoji">✏️</span> Configura API Key (1 minuto)
+            </div>
+            <div class="step-content">
+                <ol>
+                    <li>Apri la cartella del progetto in Windows Explorer</li>
+                    <li>Naviga in: <div class="code">app → src → main → java → com → chemistrynews → app → data → remote</div></li>
+                    <li>Apri con <strong>Notepad</strong> il file: <span class="highlight">NewsApiService.kt</span></li>
+                    <li>Trova la riga 8:</li>
+                </ol>
+                <div class="code">const val API_KEY = "YOUR_API_KEY_HERE"</div>
+                <ol start="5">
+                    <li>Sostituisci <code>YOUR_API_KEY_HERE</code> con la tua chiave:</li>
+                </ol>
+                <div class="code">const val API_KEY = "la_tua_chiave_qui"</div>
+                <div class="warning">
+                    ⚠️ <strong>IMPORTANTE:</strong> Lascia le virgolette <code>" "</code> !
+                </div>
+                <ol start="6">
+                    <li>Salva il file (Ctrl+S)</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">3</span>
+                <span class="emoji">⚙️</span> Compila APK (3-5 minuti)
+            </div>
+            <div class="step-content">
+                <ol>
+                    <li>Nella cartella principale del progetto, trova il file:</li>
+                </ol>
+                <div class="code">COMPILA-APK.bat</div>
+                <ol start="2">
+                    <li><strong>Fai DOPPIO CLICK</strong> su questo file</li>
+                    <li>Si aprirà una finestra nera (Prompt dei Comandi)</li>
+                    <li>Premi <span class="highlight">INVIO</span> quando richiesto</li>
+                    <li>Aspetta 3-5 minuti (la prima volta è più lenta)</li>
+                    <li>Quando vedi <strong>"COMPILAZIONE COMPLETATA!"</strong> → Fatto! ✅</li>
+                </ol>
+                <div class="success">
+                    🎉 L'APK sarà in: <strong>app\build\outputs\apk\debug\app-debug.apk</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">4</span>
+                <span class="emoji">📲</span> Installa su Samsung S22
+            </div>
+            <div class="step-content">
+                <h3>🔌 Metodo USB (Consigliato):</h3>
+                <ol>
+                    <li>Collega il tuo S22 al PC con cavo USB</li>
+                    <li>Sul telefono: scegli <strong>"Trasferimento file"</strong></li>
+                    <li>Copia <strong>app-debug.apk</strong> sul telefono (cartella Download)</li>
+                    <li>Sul telefono: apri <strong>"I Miei File"</strong> → Download</li>
+                    <li>Tocca <strong>app-debug.apk</strong></li>
+                    <li>Se richiesto: Impostazioni → Attiva <strong>"Installa app sconosciute"</strong></li>
+                    <li>Tocca <strong>"Installa"</strong></li>
+                    <li><strong>FATTO!</strong> 🎉</li>
+                </ol>
+
+                <h3 style="margin-top: 20px;">📧 Metodo Email (Alternativo):</h3>
+                <ol>
+                    <li>Manda <strong>app-debug.apk</strong> a te stesso via email</li>
+                    <li>Apri l'email sul telefono</li>
+                    <li>Scarica l'allegato</li>
+                    <li>Segui i passi 5-8 sopra</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-title">
+                <span class="emoji">🆘</span> Problemi Comuni
+            </div>
+            <div class="step-content">
+                <div class="troubleshoot">
+                    <strong>❌ "Java non trovato"</strong><br>
+                    → Installa Java JDK da: <a href="https://adoptium.net/" target="_blank">https://adoptium.net/</a><br>
+                    → Riavvia il PC e riprova
+                </div>
+
+                <div class="troubleshoot">
+                    <strong>❌ "API Key non valida"</strong><br>
+                    → Controlla di aver copiato TUTTA la chiave<br>
+                    → Controlla che sia tra le virgolette " "<br>
+                    → Ricompila l'APK
+                </div>
+
+                <div class="troubleshoot">
+                    <strong>❌ "Android SDK non trovato"</strong><br>
+                    → Apri Android Studio<br>
+                    → Tools → SDK Manager<br>
+                    → Installa Android SDK Platform 34
+                </div>
+
+                <div class="troubleshoot">
+                    <strong>❌ "Non riesco a installare APK"</strong><br>
+                    → Impostazioni → Sicurezza → Installa app sconosciute<br>
+                    → Attiva per "I Miei File" o "Chrome"
+                </div>
+            </div>
+        </div>
+
+        <div class="final">
+            <div class="emoji" style="font-size: 3em;">🎉</div>
+            <div style="margin-top: 20px;">
+                <strong>Congratulazioni!</strong><br>
+                Ora hai la tua app Chemistry News installata!
+            </div>
+            <div style="margin-top: 20px; font-size: 0.9em;">
+                🔍 Cerca • 📚 Cataloga • 🤖 Approfondisci
+            </div>
+        </div>
+    </div>
+</body>
+</html>
