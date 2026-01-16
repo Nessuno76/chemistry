@@ -1,0 +1,49 @@
+==================================================================
+  CHEMISTRY NEWS APP - COME SCARICARE IL PROGETTO COMPLETO
+==================================================================
+
+PASSO 1: Clone il tuo repository
+---------------------------------
+cd C:\Users\linea\Desktop
+git clone https://github.com/Nessuno76/chemistry.git
+cd chemistry
+
+
+PASSO 2: Scarica tutti i file
+------------------------------
+Hai 2 opzioni:
+
+OPZIONE A - Download ZIP diretto:
+1. Vai su: https://github.com/Nessuno76/chemistry
+2. Aspetta che io faccia il push (ti avviso)
+3. Click su "Code" -> "Download ZIP"
+4. Estrai tutto nella cartella chemistry
+
+OPZIONE B - Usa questo comando (quando ti avviso):
+git pull origin main
+
+
+PASSO 3: Configura API Key
+---------------------------
+1. Vai su: https://newsapi.org/register
+2. Registrati (GRATIS)
+3. Copia la tua API Key
+4. Apri: app\src\main\java\com\chemistrynews\app\data\remote\NewsApiService.kt
+5. Sostituisci YOUR_API_KEY_HERE con la tua chiave
+6. Salva il file
+
+
+PASSO 4: Compila l'APK
+-----------------------
+Fai doppio click su: COMPILA-APK.bat
+Aspetta 3-5 minuti
+Troverai l'APK in: app\build\outputs\apk\debug\app-debug.apk
+
+
+PASSO 5: Installa sul S22
+--------------------------
+1. Copia app-debug.apk sul telefono
+2. Installa l'APK
+3. FATTO! 🎉
+
+==================================================================
