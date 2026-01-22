@@ -17,7 +17,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.chemistrynews.app.data.model.Article
+import com.chemistrynews.app.data.translation.TranslationService
 import com.chemistrynews.app.ui.components.CategoryChips
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -31,6 +33,12 @@ fun ArticleDetailScreen(
     val context = LocalContext.current
     val scrollState = rememberScrollState()
     var showSummaryDialog by remember { mutableStateOf(false) }
+
+    // Stato per la traduzione
+    var isTranslated by remember { mutableStateOf(false) }
+    var translatedContent by remember { mutableStateOf("") }
+    var isTranslating by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
@@ -161,13 +169,14 @@ fun ArticleDetailScreen(
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
                         Text(
-                            text = content,
+                            text = if (isTranslated) translatedContent else content,
                             style = MaterialTheme.typography.bodyMedium
                         )
                     }
                 }
             }
 
+            // Bottone Genera Riassunto AI
             Button(
                 onClick = {
                     if (article.aiSummary != null) {
@@ -186,6 +195,32 @@ fun ArticleDetailScreen(
                     } else {
                         "Genera Riassunto AI"
                     }
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Bottone Traduci in Italiano
+            Button(
+                onClick = {
+                    coroutineScope.launch {
+                        isTranslating = true
+                        translatedContent = TranslationService.translateToItalian(
+                            article.content ?: article.description ?: ""
+                        )
+                        isTranslated = true
+                        isTranslating = false
+                    }
+                },
+                modifier = Modifier.fillMaxWidth(),
+                enabled = !isTranslating
+            ) {
+                Icon(Icons.Default.Translate, contentDescription = null)
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    if (isTranslating) "Traduzione in corso..."
+                    else if (isTranslated) "Mostra originale"
+                    else "Traduci in Italiano"
                 )
             }
 
