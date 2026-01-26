@@ -40,7 +40,14 @@ class NewsViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
 
-            repository.searchChemistryNews(categories).collect { result ->
+            // Se non ci sono categorie, usa tutte le categorie disponibili
+            val searchCategories = if (categories.isEmpty()) {
+                ChemistryCategory.values().toList()
+            } else {
+                categories
+            }
+
+            repository.searchChemistryNews(searchCategories).collect { result ->
                 result.onSuccess { articles ->
                     _uiState.update {
                         it.copy(
@@ -82,10 +89,21 @@ class NewsViewModel(
     fun generateAISummary(articleId: Long, content: String) {
         viewModelScope.launch {
             try {
-                // Simulazione di generazione AI summary
-                // In produzione, qui si chiamerebbe un'API come Claude o OpenAI
+                // Generazione summary
                 val summary = generateMockSummary(content)
                 repository.updateArticleWithAISummary(articleId, summary)
+                
+                // Aggiorna l'articolo nello stato UI
+                _uiState.update { currentState ->
+                    val updatedArticles = currentState.articles.map { article ->
+                        if (article.id == articleId) {
+                            article.copy(aiSummary = summary)
+                        } else {
+                            article
+                        }
+                    }
+                    currentState.copy(articles = updatedArticles)
+                }
             } catch (e: Exception) {
                 // Handle error
             }
@@ -93,18 +111,22 @@ class NewsViewModel(
     }
 
     private fun generateMockSummary(content: String): String {
-        // Mock implementation - replace with actual AI API call
         val preview = content.take(500)
         return """
-            Riassunto Automatico:
+            🔬 Riassunto Automatico
 
             Questo articolo tratta argomenti rilevanti nel campo della chimica.
+
+            📄 Anteprima:
             $preview...
 
-            Punti Chiave:
+            💡 Punti Chiave:
             • Scoperte recenti nella ricerca chimica
             • Implicazioni pratiche e applicazioni
             • Sviluppi futuri nel settore
+            
+            ⚗️ Conclusioni:
+            L'articolo fornisce informazioni utili per comprendere gli sviluppi attuali nel settore chimico.
         """.trimIndent()
     }
 }

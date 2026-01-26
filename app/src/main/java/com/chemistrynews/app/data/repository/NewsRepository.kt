@@ -17,13 +17,9 @@ class NewsRepository(private val articleDao: ArticleDao) {
         categories: List<ChemistryCategory> = ChemistryCategory.values().toList()
     ): Flow<Result<List<Article>>> = flow {
         try {
-            // Query semplificata - News API funziona meglio con query brevi
-            val query = if (categories.isEmpty()) {
-                "chemistry OR chemical"
-            } else {
-                val mainKeywords = categories.flatMap { it.keywords }.take(5)
-                (listOf("chemistry", "chemical") + mainKeywords).distinct().joinToString(" OR ")
-            }
+            // Query semplificata - sempre usa "chemistry OR chemical"
+            // Le categorie servono solo per il filtering e classificazione
+            val query = "chemistry OR chemical OR molecule OR compound"
 
             val response = newsApiService.searchNews(
                 query = query,
@@ -36,7 +32,6 @@ class NewsRepository(private val articleDao: ArticleDao) {
             if (response.status == "ok") {
                 val articles = response.articles
                     .filter { article ->
-                        // Filtro base - solo verifica che abbiano contenuto
                         !article.title.isNullOrBlank() && 
                         !article.description.isNullOrBlank()
                     }
@@ -45,6 +40,14 @@ class NewsRepository(private val articleDao: ArticleDao) {
                         newsArticle.toArticle(articleCategories)
                     }
                     .distinctBy { it.url }
+                    .filter { article ->
+                        // Se ci sono categorie specifiche richieste, filtra per quelle
+                        if (categories.size < ChemistryCategory.values().size) {
+                            article.categories.any { it in categories }
+                        } else {
+                            true // Mostra tutti se sono selezionate tutte le categorie
+                        }
+                    }
                 
                 emit(Result.success(articles))
             } else {
