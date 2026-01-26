@@ -8,8 +8,8 @@ import com.chemistrynews.app.data.local.Converters
 @Entity(tableName = "articles")
 @TypeConverters(Converters::class)
 data class Article(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
+    @PrimaryKey
+    val id: Long,
     val title: String,
     val description: String?,
     val content: String?,
@@ -48,6 +48,7 @@ data class NewsSource(
 
 fun NewsArticle.toArticle(categories: List<ChemistryCategory> = emptyList()): Article {
     return Article(
+        id = url.hashCode().toLong(),
         title = title,
         description = description,
         content = content,

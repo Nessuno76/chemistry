@@ -17,22 +17,45 @@ class NewsRepository(private val articleDao: ArticleDao) {
         categories: List<ChemistryCategory> = ChemistryCategory.values().toList()
     ): Flow<Result<List<Article>>> = flow {
         try {
+            // Query migliorata con più termini scientifici
+            val baseTerms = listOf(
+                "chemistry", "chemical", "molecule", "compound", "reaction",
+                "synthesis", "research", "discovery", "scientist", "laboratory"
+            )
+            
             val keywords = if (categories.isEmpty()) {
-                "chemistry"
+                baseTerms.joinToString(" OR ")
             } else {
-                categories.flatMap { it.keywords }.joinToString(" OR ")
+                val categoryKeywords = categories.flatMap { it.keywords }
+                (baseTerms + categoryKeywords).distinct().joinToString(" OR ")
             }
 
             val response = newsApiService.searchNews(
                 query = keywords,
+                language = "en",
+                sortBy = "publishedAt",
+                pageSize = 100,
                 apiKey = NewsApiService.API_KEY
             )
 
             if (response.status == "ok") {
-                val articles = response.articles.map { newsArticle ->
-                    val articleCategories = detectCategories(newsArticle.title, newsArticle.description)
-                    newsArticle.toArticle(articleCategories)
-                }
+                val articles = response.articles
+                    .filter { article ->
+                        // Filtra articoli rilevanti
+                        val text = "${article.title} ${article.description ?: ""}".lowercase()
+                        val hasChemistryTerms = baseTerms.any { term -> 
+                            text.contains(term.lowercase()) 
+                        }
+                        val hasValidContent = !article.title.isNullOrBlank() && 
+                                            !article.description.isNullOrBlank()
+                        hasChemistryTerms && hasValidContent
+                    }
+                    .map { newsArticle ->
+                        val articleCategories = detectCategories(newsArticle.title, newsArticle.description)
+                        newsArticle.toArticle(articleCategories)
+                    }
+                    .distinctBy { it.url }  // Rimuovi duplicati
+                
                 emit(Result.success(articles))
             } else {
                 emit(Result.failure(Exception("Failed to fetch news")))
