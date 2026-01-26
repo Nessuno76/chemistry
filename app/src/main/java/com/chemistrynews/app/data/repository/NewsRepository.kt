@@ -17,21 +17,16 @@ class NewsRepository(private val articleDao: ArticleDao) {
         categories: List<ChemistryCategory> = ChemistryCategory.values().toList()
     ): Flow<Result<List<Article>>> = flow {
         try {
-            // Query migliorata con più termini scientifici
-            val baseTerms = listOf(
-                "chemistry", "chemical", "molecule", "compound", "reaction",
-                "synthesis", "research", "discovery", "scientist", "laboratory"
-            )
-            
-            val keywords = if (categories.isEmpty()) {
-                baseTerms.joinToString(" OR ")
+            // Query semplificata - News API funziona meglio con query brevi
+            val query = if (categories.isEmpty()) {
+                "chemistry OR chemical"
             } else {
-                val categoryKeywords = categories.flatMap { it.keywords }
-                (baseTerms + categoryKeywords).distinct().joinToString(" OR ")
+                val mainKeywords = categories.flatMap { it.keywords }.take(5)
+                (listOf("chemistry", "chemical") + mainKeywords).distinct().joinToString(" OR ")
             }
 
             val response = newsApiService.searchNews(
-                query = keywords,
+                query = query,
                 language = "en",
                 sortBy = "publishedAt",
                 pageSize = 100,
@@ -41,24 +36,19 @@ class NewsRepository(private val articleDao: ArticleDao) {
             if (response.status == "ok") {
                 val articles = response.articles
                     .filter { article ->
-                        // Filtra articoli rilevanti
-                        val text = "${article.title} ${article.description ?: ""}".lowercase()
-                        val hasChemistryTerms = baseTerms.any { term -> 
-                            text.contains(term.lowercase()) 
-                        }
-                        val hasValidContent = !article.title.isNullOrBlank() && 
-                                            !article.description.isNullOrBlank()
-                        hasChemistryTerms && hasValidContent
+                        // Filtro base - solo verifica che abbiano contenuto
+                        !article.title.isNullOrBlank() && 
+                        !article.description.isNullOrBlank()
                     }
                     .map { newsArticle ->
                         val articleCategories = detectCategories(newsArticle.title, newsArticle.description)
                         newsArticle.toArticle(articleCategories)
                     }
-                    .distinctBy { it.url }  // Rimuovi duplicati
+                    .distinctBy { it.url }
                 
                 emit(Result.success(articles))
             } else {
-                emit(Result.failure(Exception("Failed to fetch news")))
+                emit(Result.failure(Exception("Failed to fetch news: ${response.status}")))
             }
         } catch (e: Exception) {
             emit(Result.failure(e))
